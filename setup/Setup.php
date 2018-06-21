@@ -19,6 +19,9 @@ class Setup {
     private static $addTestIDP;
     private static $addExamples;
     private static $localTestIDP;
+    private static $country;
+    private static $state;
+    private static $city;
 
     // default values:
     private static $_homeDir;
@@ -27,6 +30,9 @@ class Setup {
     private static $_serviceName;
     private static $_entityID;
     private static $_acsIndex;
+    private static $_country;
+    private static $_state;
+    private static $_city;
 
     public static function setup(Event  $event) {
         $colors = new Colors();
@@ -41,6 +47,9 @@ class Setup {
         self::$_serviceName = "myservice";
         self::$_entityID = "https://localhost";
         self::$_acsIndex = 0;
+        self::$_country = 'IT';
+        self::$_state = 'Italy';
+        self::$_city = 'Rome';
 
         if (file_exists(self::$config_filename)) {
             self::loadConfig(self::$config_filename);
@@ -81,6 +90,15 @@ class Setup {
 
         echo "Add example php file to www ? (" . $colors->getColoredString("Y", "green") . "): ";
         self::$addExamples = readline();
+
+        echo "Service provider X.509 Country Name (2 letter code) (" . $colors->getColoredString(self::$_country) . "): ";
+        self::$country = readline();
+
+        echo "Service provider X.509 State or Province Name (full name) (" . $colors->getColoredString(self::$_state) . "): ";
+        self::$state = readline();
+
+        echo "Service provider X.509 Locality Name (eg, city) (" . $colors->getColoredString(self::$_city) . "): ";
+        self::$city = readline();
     }
 
     private static function fixConfig() {
@@ -92,6 +110,9 @@ class Setup {
         self::$addTestIDP = (self::$addTestIDP!=null && strtoupper(self::$addTestIDP)=="N")? false:true;
         self::$localTestIDP = self::$localTestIDP == null ? "" : self::$localTestIDP;
         self::$addExamples = (self::$addExamples!=null && strtoupper(self::$addExamples)=="N")? false:true;
+        if(self::$country==null || self::$country=="") self::$country = self::$_country;
+        if(self::$state==null || self::$state=="") self::$state = self::$_state;
+        if(self::$city==null || self::$city=="") self::$city = self::$_city;
     }
 
     private static function configure() {
@@ -105,6 +126,10 @@ class Setup {
         echo $colors->getColoredString("\nAdd configuration for Test IDP idp.spid.gov.it: ", "yellow");
         echo $colors->getColoredString((self::$addTestIDP)? "Y":"N", "yellow");
         echo $colors->getColoredString("\nURI for local Test IDP metadata endpoint: " . self::$localTestIDP, "yellow");
+        echo $colors->getColoredString("\nAttribute Consuming Service Index: " . self::$acsIndex, "yellow");
+        echo $colors->getColoredString("\nService provider X.509 Country Name (2 letter code): " . self::$country, "yellow");
+        echo $colors->getColoredString("\nService provider X.509 State or Province Name (full name): " . self::$state, "yellow");
+        echo $colors->getColoredString("\nService provider X.509 Locality Name (eg, city): " . self::$city, "yellow");
 
         echo "\n\n";
 
@@ -120,9 +145,11 @@ class Setup {
 
         // create certificates
         shell_exec("mkdir " . self::$curDir . "/vendor/simplesamlphp/simplesamlphp/cert");
-        shell_exec("openssl req -newkey rsa:2048 -new -x509 -days 3652 -nodes -out " .
-                    self::$curDir . "/vendor/simplesamlphp/simplesamlphp/cert/spid-sp.crt -keyout " .
-                    self::$curDir . "/vendor/simplesamlphp/simplesamlphp/cert/spid-sp.pem");
+        $fqdn = parse_url(self::$entityID, PHP_URL_HOST);
+        shell_exec("openssl req -newkey rsa:2048 -new -x509 -days 3652 -nodes " .
+                    '-subj "/C=' . self::$country . '/ST=' . self::$state . '/L=' . self::$city . '/O=' . self::$serviceName . '/CN=' . $fqdn . '" ' .
+                    "-out " . self::$curDir . "/vendor/simplesamlphp/simplesamlphp/cert/spid-sp.crt " .
+                    "-keyout " . self::$curDir . "/vendor/simplesamlphp/simplesamlphp/cert/spid-sp.pem");
 
         shell_exec("mkdir " . self::$curDir . "/cert");
         shell_exec("cp " . self::$curDir . "/vendor/simplesamlphp/simplesamlphp/cert/*.crt " . self::$curDir . "/cert");
@@ -396,7 +423,10 @@ class Setup {
             'acsIndex' => self::$acsIndex,
             'addTestIDP' => self::$addTestIDP,
             'localTestIDP' => self::$localTestIDP,
-            'addExamples' => self::$addExamples);
+            'addExamples' => self::$addExamples,
+            'country' => self::$country,
+            'state' => self::$state,
+            'city' => self::$city);
         $yaml = Yaml::dump($config_array);
         file_put_contents($filename, $yaml);
     }

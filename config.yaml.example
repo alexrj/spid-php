@@ -14,3 +14,10 @@ addTestIDP: true
 localTestIDP: ''
 # Add example php file to www ?
 addExamples: true
+# Service provider X.509 certificate data:
+# Country Name (2 letter code)
+country: 'IT'
+# State or Province Name (full name)
+state: 'Italy'
+# Locality Name
+city: 'Rome'
