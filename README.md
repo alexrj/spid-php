@@ -14,7 +14,7 @@ Durante il processo di setup lo script richiede l'inserimento delle seguenti inf
 * se inserire nella configurazione i dati dell'IDP di test (https://idp.spid.gov.it)
 * se inserire nella configurazione i dati di un IDP di test locale
 * se copiare nella root del webserver i file di esempio per l'integrazione del bottone
-* i dati per la generazione del certificato X.509 per il service provider
+* i dati per la generazione del certificato X.509 per il service provider (l'`Organization Name` viene posto uguale al nome del servizio, il `Common Name` è posto pari al FQDN derivato dall'EntityID mentre `Organizational Unit Name` ed `Email Address` sono lasciati indefiniti)
 
 e si occupa di eseguire i seguenti passi:
 * scarica l'ultima versione di SimpleSAMLphp con le relative dipendenze
@@ -26,7 +26,7 @@ e si occupa di eseguire i seguenti passi:
 * predispone il template e le risorse grafiche dello smart button per essere utilizzate con SimpleSAMLphp
 * salva la configurazione nel file `config.yaml`
 
-Se il file `config.yaml` è presente all'atto dell'installazione, tutti i parametri di configurazione vengono letti da lì è l'installazione è completamente automatizzata.
+Se il file `config.yaml` è reso disponibile nella directory corrente all'atto dell'installazione, tutti i parametri di configurazione vengono letti da lì e l'installazione è completamente automatizzata.
 Per il formato del file `config.yaml` si veda il file di esempio `config.yaml.example`.
 
 Al termine del processo di setup si potrà utilizzare il certificato X.509 creato nella directory /cert per registrare il service provider sull'ambiente di test tramite l'interfaccia di backoffice (https://idp.spid.gov.it:8080).
