@@ -24,6 +24,10 @@ e si occupa di eseguire i seguenti passi:
 * se richiesto, scarica i metadata dell'IDP di test locale
 * effettua tutte le necessarie configurazioni su SimpleSAMLphp
 * predispone il template e le risorse grafiche dello smart button per essere utilizzate con SimpleSAMLphp
+* salva la configurazione nel file `config.yaml`
+
+Se il file `config.yaml` è presente all'atto dell'installazione, tutti i parametri di configurazione vengono letti da lì è l'installazione è completamente automatizzata.
+Per il formato del file `config.yaml` si veda il file di esempio `config.yaml.example`.
 
 Al termine del processo di setup si potrà utilizzare il certificato X.509 creato nella directory /cert per registrare il service provider sull'ambiente di test tramite l'interfaccia di backoffice (https://idp.spid.gov.it:8080).
 Se si è scelto di copiare i file di esempio, inoltre, sarà possibile verificare subito l'integrazione accedendo da web a /login.php o /user.php
