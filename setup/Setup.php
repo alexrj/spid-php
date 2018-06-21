@@ -4,8 +4,12 @@ namespace setup;
 
 use Composer\Script\Event;
 use Colors;
+use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\Yaml\Exception\ParseException;
 
 class Setup {
+    private static $config_filename = './config.yaml';
+
     // configuration variables:
     private static $curDir;
     private static $wwwDir;
@@ -38,10 +42,17 @@ class Setup {
         self::$_entityID = "https://localhost";
         self::$_acsIndex = 0;
 
-        self::acquireConfig();
+        if (file_exists(self::$config_filename)) {
+            self::loadConfig(self::$config_filename);
+        } else {
+            self::acquireConfig();
+        }
+
         self::fixConfig();
 
         self::configure();
+
+        self::saveConfig(self::$config_filename);
     }
 
     private static function acquireConfig() {
@@ -340,51 +351,55 @@ class Setup {
         echo $colors->getColoredString("\n\nSPID PHP SDK successfully installed! Enjoy the identities\n\n", "green");
     }
 
-
-
     public static function remove() {
         $colors = new Colors();
 
+        self::loadConfig(self::$config_filename);
         // retrieve path and inputs
-        self::$_wwwDir = shell_exec('echo -n "$HOME/public_html"');
-        $_installDir = getcwd();
-        self::$_serviceName = "myservice";
-
-        echo "Please insert root path where sdk is installed (" . $colors->getColoredString($_installDir, "green") . "): ";
-        $installDir = readline();
-        if($installDir==null || $installDir=="") $installDir = $_installDir;
-
-        echo "Please insert path for www (" . $colors->getColoredString(self::$_wwwDir, "green") . "): ";
-        self::$wwwDir = readline();
-        if(self::$wwwDir==null || self::$wwwDir=="") self::$wwwDir = self::$_wwwDir;
-
-        echo "Please insert name for service endpoint (" . $colors->getColoredString(self::$_serviceName, "green") . "): ";
-        self::$serviceName = readline();
-        if(self::$serviceName==null || self::$serviceName=="") self::$serviceName = self::$_serviceName;
-
 
         echo $colors->getColoredString("\nRemove vendor directory... ", "white");
-        shell_exec("rm -Rf " . $installDir . "/vendor");
+        shell_exec("rm -Rf " . self::$curDir . "/vendor");
         echo $colors->getColoredString("OK", "green");
         echo $colors->getColoredString("\nRemove cert directory... ", "white");
-        shell_exec("rm -Rf " . $installDir . "/cert");
+        shell_exec("rm -Rf " . self::$curDir . "/cert");
         echo $colors->getColoredString("OK", "green");
         echo $colors->getColoredString("\nRemove simplesamlphp service symlink... ", "white");
         shell_exec("rm " . self::$wwwDir . "/" . self::$serviceName);
         echo $colors->getColoredString("OK", "green");
         echo $colors->getColoredString("\nRemove sdk file... ", "white");
-        shell_exec("rm " . $installDir . "/spid-php.php");
+        shell_exec("rm " . self::$curDir . "/spid-php.php");
         echo $colors->getColoredString("OK", "green");
         echo $colors->getColoredString("\nRemove composer lock file... ", "white");
-        shell_exec("rm " . $installDir . "/composer.lock");
+        shell_exec("rm " . self::$curDir . "/composer.lock");
         echo $colors->getColoredString("OK", "green");
-
 
         echo $colors->getColoredString("\n\nSPID PHP SDK successfully removed\n\n", "green");
     }
 
+    private static function loadConfig($filename) {
+        try {
+            $yaml = Yaml::parseFile($filename);
+        } catch (ParseException $exception) {
+            printf('Unable to parse the YAML string: %s', $exception->getMessage());
+        }
+        foreach($yaml as $k => $v) {
+            self::$$k = $v;
+        }
+    }
 
-
+    private static function saveConfig(String $filename) {
+        $config_array = array(
+            'curDir' => self::$curDir,
+            'wwwDir' => self::$wwwDir,
+            'serviceName' => self::$serviceName,
+            'entityID' => self::$entityID,
+            'acsIndex' => self::$acsIndex,
+            'addTestIDP' => self::$addTestIDP,
+            'localTestIDP' => self::$localTestIDP,
+            'addExamples' => self::$addExamples);
+        $yaml = Yaml::dump($config_array);
+        file_put_contents($filename, $yaml);
+    }
 }
 
 ?>

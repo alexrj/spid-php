@@ -15,7 +15,8 @@
     },
     "require": {
         "simplesamlphp/simplesamlphp": "*",
-        "italia/spid-smart-button": "*"
+        "italia/spid-smart-button": "*",
+        "symfony/yaml": "^4.1"
     },
     "scripts": {
         "post-update-cmd": [

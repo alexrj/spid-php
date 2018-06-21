@@ -1,0 +1,16 @@
+# Path for current directory
+curDir: /home/paolog/Sviluppo/teamdigitale/spid-php
+# Path for web root directory
+wwwDir: /home/paolog/public_html
+# Name for service endpoint
+serviceName: myservice
+# Service Provider EntityID
+entityID: 'https://localhost'
+# Attribute Consuming Service Index
+acsIndex: 0
+# Add configuration for Public Test IDP idp.spid.gov.it ?
+addTestIDP: true
+# Optional URI for local Test IDP metadata endpoint (leave empty to skip)
+localTestIDP: ''
+# Add example php file to www ?
+addExamples: true
