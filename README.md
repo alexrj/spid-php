@@ -12,6 +12,7 @@ Durante il processo di setup lo script richiede l'inserimento delle seguenti inf
 * EntityID del service provider
 * AttributeConsumingServiceIndex da richiedere all'IDP
 * se inserire nella configurazione i dati dell'IDP di test (https://idp.spid.gov.it)
+* se inserire nella configurazione i dati di un IDP di test locale
 * se copiare nella root del webserver i file di esempio per l'integrazione del bottone
 * i dati per la generazione del certificato X.509 per il service provider
 
@@ -20,6 +21,7 @@ e si occupa di eseguire i seguenti passi:
 * scarica l'ultima versione dello spid smart button
 * crea un certificato X.509 per il service provider
 * scarica i metadata degli IDP di produzione tramite il metadata unico di configurazione (https://registry.spid.gov.it/metadata/idp/spid-entities-idps.xml)
+* se richiesto, scarica i metadata dell'IDP di test locale
 * effettua tutte le necessarie configurazioni su SimpleSAMLphp
 * predispone il template e le risorse grafiche dello smart button per essere utilizzate con SimpleSAMLphp
 
