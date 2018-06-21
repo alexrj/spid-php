@@ -37,7 +37,6 @@ class Setup {
     public static function setup(Event  $event) {
         $colors = new Colors();
 
-        echo shell_exec("clear");
         echo $colors->getColoredString("SPID PHP SDK Setup\nversion 1.0\n\n", "green");
 
         // set defaults
@@ -153,9 +152,6 @@ class Setup {
 
         shell_exec("mkdir " . self::$curDir . "/cert");
         shell_exec("cp " . self::$curDir . "/vendor/simplesamlphp/simplesamlphp/cert/*.crt " . self::$curDir . "/cert");
-
-        echo $colors->getColoredString("\n\nReady to setup. Press a key to continue or CTRL-C to exit\n", "white");
-        readline();
 
         // set link to simplesamlphp
         echo $colors->getColoredString("\nCreate symlink for simplesamlphp service... ", "white");
