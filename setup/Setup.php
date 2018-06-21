@@ -39,6 +39,7 @@ class Setup {
         self::$_acsIndex = 0;
 
         self::acquireConfig();
+        self::fixConfig();
 
         self::configure();
     }
@@ -48,34 +49,37 @@ class Setup {
 
         echo "Please insert path for current directory (" . $colors->getColoredString(self::$_curDir, "green") . "): ";
         self::$curDir = readline();
-        if(self::$curDir==null || self::$curDir=="") self::$curDir = self::$_curDir;
 
         echo "Please insert path for web root directory (" . $colors->getColoredString(self::$_wwwDir, "green") . "): ";
         self::$wwwDir = readline();
-        if(self::$wwwDir==null || self::$wwwDir=="") self::$wwwDir = self::$_wwwDir;
 
         echo "Please insert name for service endpoint (" . $colors->getColoredString(self::$_serviceName, "green") . "): ";
         self::$serviceName = readline();
-        if(self::$serviceName==null || self::$serviceName=="") self::$serviceName = self::$_serviceName;
 
         echo "Please insert your EntityID (" . $colors->getColoredString(self::$_entityID, "green") . "): ";
         self::$entityID = readline();
-        if(self::$entityID==null || self::$entityID=="") self::$entityID = self::$_entityID;
 
         echo "Please insert your Attribute Consuming Service Index (" . $colors->getColoredString(self::$_acsIndex, "green") . "): ";
         self::$acsIndex = readline();
-        if(self::$acsIndex==null || self::$acsIndex=="") self::$acsIndex = self::$_acsIndex;
 
         echo "Add configuration for Public Test IDP idp.spid.gov.it ? (" . $colors->getColoredString("Y", "green") . "): ";
         self::$addTestIDP = readline();
-        self::$addTestIDP = (self::$addTestIDP!=null && strtoupper(self::$addTestIDP)=="N")? false:true;
 
         echo "Optional URI for local Test IDP metadata endpoint (leave empty to skip) ? (): ";
         self::$localTestIDP = readline();
-        self::$localTestIDP = self::$localTestIDP == null ? "" : self::$localTestIDP;
 
         echo "Add example php file to www ? (" . $colors->getColoredString("Y", "green") . "): ";
         self::$addExamples = readline();
+    }
+
+    private static function fixConfig() {
+        if(self::$curDir==null || self::$curDir=="") self::$curDir = self::$_curDir;
+        if(self::$wwwDir==null || self::$wwwDir=="") self::$wwwDir = self::$_wwwDir;
+        if(self::$serviceName==null || self::$serviceName=="") self::$serviceName = self::$_serviceName;
+        if(self::$entityID==null || self::$entityID=="") self::$entityID = self::$_entityID;
+        if(self::$acsIndex==null || self::$acsIndex=="") self::$acsIndex = self::$_acsIndex;
+        self::$addTestIDP = (self::$addTestIDP!=null && strtoupper(self::$addTestIDP)=="N")? false:true;
+        self::$localTestIDP = self::$localTestIDP == null ? "" : self::$localTestIDP;
         self::$addExamples = (self::$addExamples!=null && strtoupper(self::$addExamples)=="N")? false:true;
     }
 
