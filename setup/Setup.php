@@ -4,8 +4,6 @@ namespace setup;
 
 use Composer\Script\Event;
 use Colors;
-use Symfony\Component\Yaml\Yaml;
-use Symfony\Component\Yaml\Exception\ParseException;
 
 class Setup {
     private static $config_filename = './config.yaml';
@@ -401,8 +399,8 @@ class Setup {
 
     private static function loadConfig($filename) {
         try {
-            $yaml = Yaml::parseFile($filename);
-        } catch (ParseException $exception) {
+            $yaml = \Symfony\Component\Yaml\Yaml::parseFile($filename);
+        } catch (\Symfony\Component\Yaml\Exception\ParseException $exception) {
             printf('Unable to parse the YAML string: %s', $exception->getMessage());
         }
         foreach($yaml as $k => $v) {
@@ -423,7 +421,7 @@ class Setup {
             'country' => self::$country,
             'state' => self::$state,
             'city' => self::$city);
-        $yaml = Yaml::dump($config_array);
+        $yaml = \Symfony\Component\Yaml\Yaml::dump($config_array);
         file_put_contents($filename, $yaml);
     }
 }
