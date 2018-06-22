@@ -16,7 +16,7 @@
     "require": {
         "simplesamlphp/simplesamlphp": "*",
         "italia/spid-smart-button": "*",
-        "symfony/yaml": "^4.1"
+        "symfony/yaml": ">=3.4.11 <4.0"
     },
     "scripts": {
         "post-update-cmd": [
