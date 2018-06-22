@@ -375,8 +375,26 @@ class Setup {
     public static function remove() {
         $colors = new Colors();
 
-        self::loadConfig(self::$config_filename);
         // retrieve path and inputs
+        if (file_exists(self::$config_filename)) {
+            self::loadConfig(self::$config_filename);
+        } else {
+            self::$_wwwDir = shell_exec('echo -n "$HOME/public_html"');
+            self::$_curDir = getcwd();
+            self::$_serviceName = "myservice";
+
+            echo "Please insert root path where sdk is installed (" . $colors->getColoredString(self::$_curDir, "green") . "): ";
+            self::$curDir = readline();
+            if(self::$curDir==null || self::$curDir=="") self::$curDir = self::$_curDir;
+
+            echo "Please insert path for www (" . $colors->getColoredString(self::$_wwwDir, "green") . "): ";
+            self::$wwwDir = readline();
+            if(self::$wwwDir==null || self::$wwwDir=="") self::$wwwDir = self::$_wwwDir;
+
+            echo "Please insert name for service endpoint (" . $colors->getColoredString(self::$_serviceName, "green") . "): ";
+            self::$serviceName = readline();
+            if(self::$serviceName==null || self::$serviceName=="") self::$serviceName = self::$_serviceName;
+        }
 
         echo $colors->getColoredString("\nRemove vendor directory... ", "white");
         shell_exec("rm -Rf " . self::$curDir . "/vendor");
