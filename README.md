@@ -12,16 +12,22 @@ Durante il processo di setup lo script richiede l'inserimento delle seguenti inf
 * EntityID del service provider
 * AttributeConsumingServiceIndex da richiedere all'IDP
 * se inserire nella configurazione i dati dell'IDP di test (https://idp.spid.gov.it)
+* se inserire nella configurazione i dati di un IDP di test locale
 * se copiare nella root del webserver i file di esempio per l'integrazione del bottone
-* i dati per la generazione del certificato X.509 per il service provider
+* i dati per la generazione del certificato X.509 per il service provider (l'`Organization Name` viene posto uguale al nome del servizio, il `Common Name` è posto pari al FQDN derivato dall'EntityID mentre `Organizational Unit Name` ed `Email Address` sono lasciati indefiniti)
 
 e si occupa di eseguire i seguenti passi:
 * scarica l'ultima versione di SimpleSAMLphp con le relative dipendenze
 * scarica l'ultima versione dello spid smart button
 * crea un certificato X.509 per il service provider
 * scarica i metadata degli IDP di produzione tramite il metadata unico di configurazione (https://registry.spid.gov.it/metadata/idp/spid-entities-idps.xml)
+* se richiesto, scarica i metadata dell'IDP di test locale
 * effettua tutte le necessarie configurazioni su SimpleSAMLphp
 * predispone il template e le risorse grafiche dello smart button per essere utilizzate con SimpleSAMLphp
+* salva la configurazione nel file `config.yaml`
+
+Se il file `config.yaml` è reso disponibile nella directory corrente all'atto dell'installazione, tutti i parametri di configurazione vengono letti da lì e l'installazione è completamente automatizzata.
+Per il formato del file `config.yaml` si veda il file di esempio `config.yaml.example`.
 
 Al termine del processo di setup si potrà utilizzare il certificato X.509 creato nella directory /cert per registrare il service provider sull'ambiente di test tramite l'interfaccia di backoffice (https://idp.spid.gov.it:8080).
 Se si è scelto di copiare i file di esempio, inoltre, sarà possibile verificare subito l'integrazione accedendo da web a /login.php o /user.php
