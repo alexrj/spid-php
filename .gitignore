@@ -3,3 +3,4 @@ cert
 composer.lock
 spid-php.php
 config.yaml
+php-unit-test/vendor
