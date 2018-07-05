@@ -6,10 +6,19 @@ use PHPUnit\Framework\TestCase;
 
 class SetupTest extends TestCase
 {
-    public function testExpectFooActualFoo()
+
+    public function testStart(): void
     {
-        $this->expectOutputString('foo');
-        print 'foo';
+        $this->assertInstanceOf(
+            Setup::class
+        );
     }
+
+    public function testLoadConfig(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        Setup::loadConfig();
+     }
 	
 }
