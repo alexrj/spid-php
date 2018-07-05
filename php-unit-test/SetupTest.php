@@ -4,15 +4,20 @@ require_once('../setup/Setup.php');
 
 use PHPUnit\Framework\TestCase;
 use setup\Setup;
+use Composer\Script\Event;
 
 class SetupTest extends TestCase
 {
 
-    public function testLoadConfig(): void
+    public function testSetup(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
-        Setup::loadConfig();
+        $event = "post-update-cmd": [
+            "setup\\Setup::setup"
+        ];
+
+        Setup::setup($event);
      }
 	
 }
