@@ -3,16 +3,10 @@ require_once('../setup/Setup.php');
 //require_once('vendor/autoload.php');
 
 use PHPUnit\Framework\TestCase;
+use setup\Setup;
 
 class SetupTest extends TestCase
 {
-
-    public function testStart(): void
-    {
-        $this->assertInstanceOf(
-            Setup::class
-        );
-    }
 
     public function testLoadConfig(): void
     {
