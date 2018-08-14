@@ -26,6 +26,73 @@ e si occupa di eseguire i seguenti passi:
 Al termine del processo di setup si potrà utilizzare il certificato X.509 creato nella directory /cert per registrare il service provider sull'ambiente di test tramite l'interfaccia di backoffice (https://idp.spid.gov.it:8080).
 Se si è scelto di copiare i file di esempio, inoltre, sarà possibile verificare subito l'integrazione accedendo da web a /login.php o /user.php
 
+## Compliance
+
+|<img src="https://github.com/italia/spid-graphics/blob/master/spid-logos/spid-logo-c-lb.png?raw=true" width="100" /><br />_Compliance with [SPID regulations](http://www.agid.gov.it/sites/default/files/circolari/spid-regole_tecniche_v1.pdf) (for Service Providers)_|status (! = TODO)|comments|
+|:---|:---|:---|
+|**Metadata:**|||
+|parsing of IdP XML metadata (1.2.2.4)|!|OK but could be improved (#27 and #28); the implementation is not currently checking the AgID signature, see: #33 |
+|parsing of AA XML metadata (2.2.4)||Attribute Authority is unsupported|
+|SP XML metadata generation (1.3.2)|!|the SP metadata is made available at the `/myservice/module.php/saml/sp/metadata.php/service-l1` endpoint; it is currently lacking the AttributeConsumingService array (#34) and the optional Organization key (#35)|
+|**AuthnRequest generation (1.2.2.1):**|||
+|generation of AuthnRequest XML|!|the generated AuthnRequest is not compliant (#31)|
+|HTTP-Redirect binding|✓||
+|HTTP-POST binding|✓||
+|`AssertionConsumerServiceURL` customization||N.A.|
+|`AssertionConsumerServiceIndex` customization|!|There are two acs in the SP metadata but there is no API for the use to choose|
+|`AttributeConsumingServiceIndex` customization||N.A.|
+|`AuthnContextClassRef` (SPID level) customization|✓|OK: via parameter to class constructor|
+|`RequestedAuthnContext/@Comparison` customization||see item 4 in #31|
+|`RelayState` customization (1.2.2)||N.A.|
+|**Response/Assertion parsing**|||
+|verification of `Response/Signature` value (if any)|?||
+|verification of `Response/Signature` certificate (if any) against IdP/<s>AA metadata</s>|?||
+|verification of `Assertion/Signature` value|?||
+|verification of `Assertion/Signature` certificate against IdP/<s>AA metadata</s>|?||
+|verification of `SubjectConfirmationData/@Recipient`|?||
+|verification of `SubjectConfirmationData/@NotOnOrAfter`|?||
+|verification of `SubjectConfirmationData/@InResponseTo`|?||
+|verification of `Issuer`|?||
+|verification of `Destination`|?||
+|verification of `Conditions/@NotBefore`|?||
+|verification of `Conditions/@NotOnOrAfter`|?||
+|verification of `Audience`|?||
+|parsing of Response with no `Assertion` (authentication/query failure)|?||
+|parsing of failure `StatusCode` (Requester/Responder)|?||
+|verification of `RelayState` (saml-bindings-2.0-os 3.5.3)|?||
+|**Response/Assertion parsing for SSO (1.2.1, 1.2.2.2, 1.3.1):**|||
+|parsing of `NameID`|?||
+|parsing of `AuthnContextClassRef` (SPID level)|?||
+|parsing of attributes|?||
+|**Response/Assertion parsing for attribute query (2.2.2.2, 2.3.1):**|||
+|parsing of attributes||Attribute Authority is unsupported|
+|**LogoutRequest generation (for SP-initiated logout):**|||
+|generation of LogoutRequest XML|?||
+|HTTP-Redirect binding|?||
+|HTTP-POST binding|?||
+|**LogoutResponse parsing (for SP-initiated logout):**|||
+|parsing of LogoutResponse XML|?||
+|verification of `LogoutResponse/Signature` value (if any)|?||
+|verification of `LogoutResponse/Signature` certificate (if any) against IdP metadata|?||
+|verification of `Issuer`|?||
+|verification of `Destination`|?||
+|PartialLogout detection|?||
+|**LogoutRequest parsing (for third-party-initiated logout):**||
+|parsing of LogoutRequest XML|?||
+|verification of `LogoutRequest/Signature` value (if any)|?||
+|verification of `LogoutRequest/Signature` certificate (if any) against IdP metadata|?||
+|verification of `Issuer`|?||
+|verification of `Destination`|?||
+|parsing of `NameID`|?||
+|**LogoutResponse generation (for third-party-initiated logout):**||
+|generation of LogoutResponse XML|?||
+|HTTP-Redirect binding|?||
+|HTTP-POST binding|?||
+|PartialLogout customization|?||
+|**AttributeQuery generation (2.2.2.1):**||
+|generation of AttributeQuery XML||Attribute Authority is unsupported|
+|SOAP binding (client)||Attribute Authority is unsupported|
+
 ## Requisiti
 * Web server
 * php >= 7
