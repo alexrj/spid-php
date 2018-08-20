@@ -31,18 +31,18 @@ Se si è scelto di copiare i file di esempio, inoltre, sarà possibile verificar
 |<img src="https://github.com/italia/spid-graphics/blob/master/spid-logos/spid-logo-c-lb.png?raw=true" width="100" /><br />_Compliance with [SPID regulations](http://www.agid.gov.it/sites/default/files/circolari/spid-regole_tecniche_v1.pdf) (for Service Providers)_|status (! = TODO)|comments|
 |:---|:---|:---|
 |**Metadata:**|||
-|parsing of IdP XML metadata (1.2.2.4)|!|OK but could be improved (#27 and #28); the implementation is not currently checking the AgID signature, see: #33 |
+|parsing of IdP XML metadata (1.2.2.4)|!|OK but could be improved: [#27](https://github.com/italia/spid-php/issues/27) and [#28](https://github.com/italia/spid-php/issues/28); the implementation is not currently checking the AgID signature, see: [#33](https://github.com/italia/spid-php/issues/33) |
 |parsing of AA XML metadata (2.2.4)||Attribute Authority is unsupported|
-|SP XML metadata generation (1.3.2)|!|the SP metadata is made available at the `/myservice/module.php/saml/sp/metadata.php/service-l1` endpoint; it is currently lacking the AttributeConsumingService array (#34) and the optional Organization key (#35)|
+|SP XML metadata generation (1.3.2)|!|separate SP metadata are made available for the 3 SPID levels at the `/myservice/module.php/saml/sp/metadata.php/service-l1` / `service-l2` / `service-l3` endpoints, it would be better to have dynamic SPID level switching ([#36](https://github.com/italia/spid-php/issues/36)); it should be possible to dyamically configure the `AssertionConsumerService` array ([#37](https://github.com/italia/spid-php/issues/37)); the metadata is currently lacking the `AttributeConsumingService` array ([#34](https://github.com/italia/spid-php/issues/34)) and the optional `Organization` key ([#35](https://github.com/italia/spid-php/issues/35))|
 |**AuthnRequest generation (1.2.2.1):**|||
-|generation of AuthnRequest XML|!|the generated AuthnRequest is not compliant (#31)|
+|generation of AuthnRequest XML|!|the generated `AuthnRequest` is not compliant ([#31](https://github.com/italia/spid-php/issues/31))|
 |HTTP-Redirect binding|✓||
 |HTTP-POST binding|✓||
 |`AssertionConsumerServiceURL` customization||N.A.|
-|`AssertionConsumerServiceIndex` customization|!|There are two acs in the SP metadata but there is no API for the use to choose|
-|`AttributeConsumingServiceIndex` customization||N.A.|
-|`AuthnContextClassRef` (SPID level) customization|✓|OK: via parameter to class constructor|
-|`RequestedAuthnContext/@Comparison` customization||see item 4 in #31|
+|`AssertionConsumerServiceIndex` customization|!|N.A. see: [#37](https://github.com/italia/spid-php/issues/37) |
+|`AttributeConsumingServiceIndex` customization||N.A. see: [#38](https://github.com/italia/spid-php/issues/38) |
+|`AuthnContextClassRef` (SPID level) customization|✓|OK, via parameter to the class constructor; this could be made more flexible by allowing to choose dynamically which SPID level to request passing a parameter to the `login` method ([#36](https://github.com/italia/spid-php/issues/36)) |
+|`RequestedAuthnContext/@Comparison` customization||see item 4 in [#31](https://github.com/italia/spid-php/issues/31)|
 |`RelayState` customization (1.2.2)||N.A.|
 |**Response/Assertion parsing**|||
 |verification of `Response/Signature` value (if any)|?||
